@@ -7,7 +7,7 @@ mlruns/
 .pytest_cache/
 .ruff_cache/
 *.log
-data/
+/data/
 draft_notebooks/
 wandb/
 *.egg-info/

@@ -1,0 +1,15 @@
+# PatchCamelyon: 96x96 histopathology patches, binary label
+# (0 = no tumour tissue in centre, 1 = tumour present).
+dataset_name: dbzadnen/breast-histopathology-images
+image_size: 224          # ViT expects 224; images are upscaled from 96
+
+# Subsampling — the full set (249k train) is too large  for a free Colab T4.
+# These caps keep a phase-3 run to a few hours. Set to null to use everything.
+train_subset: 10000
+val_subset: 2000
+test_subset: 2000 
+
+num_workers: 2
+batch_size: 32
+
+
