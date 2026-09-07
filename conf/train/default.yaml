@@ -1,0 +1,18 @@
+lr: 3.0e-5
+weight_decay: 0.01
+warmup_ratio: 0.1
+
+# a fixed number of steps that's identical for each trial
+max_train_steps: 2000
+eval_every_steps: 200
+
+
+# before pushing the real run to a GPU. 0 means no limit.
+max_train_batches: 0
+max_val_batches: 0
+
+log_every: 20            # log training loss every N batches
+
+patience: 3
+
+train_auc_batches: 10  

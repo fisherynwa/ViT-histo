@@ -1,0 +1,4 @@
+# configs/model/resnet.yaml
+name: microsoft/resnet-50
+num_labels: 2
+freeze_backbone: false

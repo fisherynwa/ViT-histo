@@ -1,0 +1,9 @@
+# Hugging Face model identifier for the pretrained backbone.
+# vit-base-patch16-224-in21k is pretrained on ImageNet-21k and is the
+# standard starting point for ViT fine-tuning.
+name: google/vit-base-patch16-224-in21k
+num_labels: 2
+
+# Whether to freeze the transformer backbone and train only the head.
+# Start frozen=false (full fine-tune); flip to true to compare in phase 3.
+freeze_backbone: false
