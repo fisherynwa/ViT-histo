@@ -7,6 +7,8 @@
 Fine-tuning a Vision Transformer (ViT) for binary **tumor / no-tumor** classification of breast histopathology image patches, designed as a reproducible, systematically tuned pipeline following the principles of Google's Deep Learning Tuning Playbook.
 
 The emphasis is on methodology and engineering rigour disciplined hyperparameter tuning, clean train/validation/test separation, and reproducible infrastructure as much as on the headline metric.
+
+
 ---
 ### Sample Tumor Patches
 ![Tumor patches (label = 1)](figures/label1_samples.png)
