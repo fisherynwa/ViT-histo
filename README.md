@@ -9,6 +9,7 @@ Fine-tuning a Vision Transformer (ViT) for binary **tumor / no-tumor** classific
 The emphasis is on methodology and engineering rigour disciplined hyperparameter tuning, clean train/validation/test separation, and reproducible infrastructure as much as on the headline metric.
 
 
+
 ---
 ### Sample Tumor Patches
 ![Tumor patches (label = 1)](figures/label1_samples.png)
@@ -16,9 +17,11 @@ The emphasis is on methodology and engineering rigour disciplined hyperparameter
 ### Augmentation
 ![Augmentation of a tumor patch](figures/augmentation_demo.png)
 
-During training, the applied augmentation employes the dihedral symmetries (horizontal/vertical flips
-and 90° rotations), valid because histopathology patches have no canonical
-orientation.
+Note on the dataset: there is no information about patient or slide identifiers, meaning patient-level separation between splits could not be verified. If the underlying splits contain data leakage, reported performance may overestimate generalization to unseen patients. Patient-level evaluation is a recommended validation step.
+
+A row contains solely this information: `{'image': Image(mode=None, decode=True), 'label': ClassLabel(names=['0', '1'])}` 
+
+During training, the applied augmentation employes the dihedral symmetries (horizontal/vertical flips and 90 degress rotations), valid because histopathology patches have no canonical orientation. 
 
 
 ## Headline Result
