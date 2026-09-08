@@ -4,23 +4,22 @@
 ![CI](https://github.com/fisherynwa/vit-histopathology/actions/workflows/ci.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-Fine-tuning a Vision Transformer (ViT) for binary tumor / no-tumor classification of
-breast histopathology image patches, built as a **reproducible, systematically-tuned
-pipeline** following the principles of Google's *Deep Learning Tuning Playbook*.
+Fine-tuning a Vision Transformer (ViT) for binary **tumor / no-tumor** classification of breast histopathology image patches, designed as a reproducible, systematically tuned pipeline following the principles of Google's Deep Learning Tuning Playbook.
 
+The emphasis is on methodology and engineering rigour disciplined hyperparameter tuning, clean train/validation/test separation, and reproducible infrastructure as much as on the headline metric.
 ---
-### Sample tumor patches
+### Sample Tumor Patches
 ![Tumor patches (label = 1)](figures/label1_samples.png)
 
 ### Augmentation
 ![Augmentation of a tumor patch](figures/augmentation_demo.png)
 
-Training-time augmentation uses the dihedral symmetries (horizontal/vertical flips
+During training, the applied augmentation employes the dihedral symmetries (horizontal/vertical flips
 and 90° rotations), valid because histopathology patches have no canonical
-orientation. Validation and test use deterministic transforms only.
+orientation.
 
 
-## Headline result
+## Headline Result
 ![Test AUC](https://img.shields.io/badge/test%20ROC--AUC-0.96-success)
 ![Test Brier](https://img.shields.io/badge/test%20Brier-0.070-success)
 | Setting | Value |
@@ -39,15 +38,13 @@ orientation. Validation and test use deterministic transforms only.
 | **Test (2k, held out)** | **0.9615** | **0.0698** |
 
 > The **test** set was untouched during all tuning, so its test ROC-AUC (0.9615) is an
-> unbiased estimate. Test metrics slightly *exceed* validation metrics, indicating the
-> tuning did not overfit to the validation set and the model generalizes well.
+> unbiased estimate. 
 
 ---
 
 ## Aims and Objectives
 
-Most first image-classification projects are a single notebook that trains a model and
-prints an accuracy. This project instead applies a **structured tuning methodology** and
+This project applies a **structured tuning methodology** and
 **production-style engineering** to a real medical-imaging task:
 
 - Hyperparameters are explicitly sorted into **scientific / nuisance / fixed** roles.
@@ -79,15 +76,14 @@ The tuning was run as **two sequential studies**, each with a distinct scientifi
 - **Nuisance parameters** (co-tuned so the LR comparison is fair): warmup ratio,
   weight decay.
 - **Fixed parameters:** batch size (32, throughput-limited), training horizon,
-  optimizer (AdamW), model architecture, augmentation, seed, data-split sizes.
+  optimizer (AdamW, suggest by multiple references), model architecture, augmentation, data-split sizes.
 - **Search:** quasi-random (W&B Sweeps, `method: random`).
 - **Finding:** best LR ≈ 3.3e-5; very low LRs (≈ 1e-6) clearly underperformed
   (val AUC ≈ 0.91), locating the useful LR region for this problem.
 
 ### Evaluation
 - **ROC-AUC** — discrimination (threshold-independent ranking quality).
-- **Brier score** — probability quality / calibration
-  (`mean((prob − label)^2)`).
+- **Brier score** — probability quality / calibration.
 - **Calibration** — reliability assessed via the **CORP** approach
   on the exported prediction CSVs, decomposing the Brier 
   score into miscalibration / resolution / uncertainty.
@@ -159,8 +155,6 @@ vit-histopathology/
 ├── scripts/                          # standalone utilities (not part of the package)
 │   ├── data_ratio_check.py           # class-balance verification
 │   └── make_figures.py               # sample + augmentation figures
-├── notebooks/                        # exploratory / sweep-driver notebooks
-│   └── wandb_sweep.ipynb
 ├── tests/                            # unit tests (CI runs these)
 │   ├── __init__.py
 │   └── test_*.py
@@ -210,8 +204,7 @@ Run the project's unit tests
 uv run pytest tests/ -v
 ```
 
-Hyperparameter sweep (W&B, quasi-random) is driven from the Colab notebook in
-`notebooks/` — see that notebook for the sweep configuration and agent setup.
+Hyperparameter sweep (W&B, quasi-random) was driven from the Colab notebook -- for the sweep configuration and agent setup. 
 
 ---
 
@@ -227,7 +220,8 @@ Hyperparameter sweep (W&B, quasi-random) is driven from the Colab notebook in
   (~249k train images) is available, and training on more real data would likely reduce
   the need for augmentation.
 - **Uncertainty:** with a 2k test set, reporting a confidence interval
-- **Augmentation**
+- **Augmentation:** for small datasets, additional augmentation could be applied to improve generalization by exposing the model to
+ more varied transformations of the training images
 ---
 
 ## Acknowledgements
