@@ -8,6 +8,8 @@ from omegaconf import DictConfig
 import json
 import os
 
+from transformers import loss
+
 def _write_trial_record(cfg, run_dir, record):
     """Append one trial's result to a study-level JSONL file."""
     results_path = cfg.get("study", {}).get("results_path", None)
@@ -103,12 +105,21 @@ def run_training(cfg: DictConfig, model, train_loader, val_loader, device: str):
                 break
             batch = {k: v.to(device) for k, v in batch.items()}
 
+            # Clears .grad to ensure a clean slate
+            optimizer.zero_grad()    
+
+            # Forward pass      
             outputs = model(**batch)
             loss = outputs.loss
+
+            # Backward pass (compute new gradients)
             loss.backward()
+
+            # Update parameters
             optimizer.step()
+            
+            # Updates learning rate
             scheduler.step()
-            optimizer.zero_grad()
             global_step += 1
 
             if global_step % cfg.train.log_every == 0:

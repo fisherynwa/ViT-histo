@@ -1,4 +1,4 @@
-# ViT Fine-Tuning for Breast Histopathology Classification
+# ViT Fine-Tuning for Breast Histopathology Image Classification
 
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue) ![PyTorch](https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white) ![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-yellow) ![Hydra](https://img.shields.io/badge/config-Hydra-89b8cd) ![W&B](https://img.shields.io/badge/tracking-W%26B-ffbe00) ![uv](https://img.shields.io/badge/deps-uv-de5fe9)
 ![CI](https://github.com/fisherynwa/vit-histopathology/actions/workflows/ci.yml/badge.svg)
@@ -42,8 +42,7 @@ During training, the applied augmentation employes the dihedral symmetries (hori
 | Validation (2k) | 0.9527 | 0.0816 |
 | **Test (2k, held out)** | **0.9615** | **0.0698** |
 
-> The **test** set was untouched during all tuning, so its test ROC-AUC (0.9615) is an
-> unbiased estimate. 
+> The **test** set was untouched during all tuning, so its test ROC-AUC (0.9615)
 
 ---
 
