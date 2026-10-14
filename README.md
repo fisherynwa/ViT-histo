@@ -6,9 +6,7 @@
 
 Fine-tuning a Vision Transformer (ViT) for binary **tumor / no-tumor** classification of breast histopathology image patches, designed as a reproducible, systematically tuned pipeline following the principles of Google's Deep Learning Tuning Playbook.
 
-The emphasis is on methodology and engineering rigour disciplined hyperparameter tuning, clean train/validation/test separation, and reproducible infrastructure as much as on the headline metric.
-
-
+The emphasis is on methodology and engineering rigour, namely disciplined hyperparameter tuning, clean train/validation/test separation, and reproducible infrastructure as much as on the headline metric.
 
 ---
 ### Sample Tumor Patches
@@ -21,7 +19,7 @@ Note on the dataset: there is no information about patient or slide identifiers,
 
 A row contains solely this information: `{'image': Image(mode=None, decode=True), 'label': ClassLabel(names=['0', '1'])}` 
 
-During training, the applied augmentation employes the dihedral symmetries (horizontal/vertical flips and 90 degress rotations), valid because histopathology patches have no canonical orientation. 
+During training, the applied augmentation employs the dihedral symmetries (horizontal/vertical flips and 90-degree rotations), valid because histopathology patches have no canonical orientation. 
 
 
 ## Headline Result
@@ -57,14 +55,14 @@ This project applies a **structured tuning methodology** and
 - The best model is chosen by **retrospective checkpoint selection** (best validation
   metric), not the final epoch.
 - The **test set is held out** and untouched during tuning, for an unbiased final estimate.
-- Hyperparameter search uses **quasi-random search** (the exploration-phase method the
+- Hyperparameter search uses **quasi-random search** (the *exploration-phase* method that the
   Tuning Playbook recommends).
 
 ---
 
 ## Methodology
 
-The tuning was run as **two sequential studies**, each with a distinct scientific question.
+The tuning was run as **two sequential studies**, each with a distinct scientific direction.
 
 ### Study 1 — Freeze vs. full fine-tune
 - **Scientific parameter:** `freeze_backbone`.
@@ -80,7 +78,7 @@ The tuning was run as **two sequential studies**, each with a distinct scientifi
 - **Nuisance parameters** (co-tuned so the LR comparison is fair): warmup ratio,
   weight decay.
 - **Fixed parameters:** batch size (32, throughput-limited), training horizon,
-  optimizer (AdamW, suggest by multiple references), model architecture, augmentation, data-split sizes.
+  optimizer (AdamW, suggested by multiple references), model architecture, augmentation, data-split sizes.
 - **Search:** quasi-random (W&B Sweeps, `method: random`).
 - **Finding:** best LR ≈ 3.3e-5; very low LRs (≈ 1e-6) clearly underperformed
   (val AUC ≈ 0.91), locating the useful LR region for this problem.
@@ -89,8 +87,7 @@ The tuning was run as **two sequential studies**, each with a distinct scientifi
 - **ROC-AUC** — discrimination (threshold-independent ranking quality).
 - **Brier score** — probability quality / calibration.
 - **Calibration** — reliability assessed via the **CORP** approach
-  on the exported prediction CSVs, decomposing the Brier 
-  score into miscalibration / resolution / uncertainty.
+  on the exported prediction CSVs
 
 ---
 
@@ -215,7 +212,7 @@ Hyperparameter sweep (W&B, quasi-random) was driven from the Colab notebook -- f
 ## Notes & possible extensions
 
 - **Exploitation phase:** the sweep used quasi-random search (exploration). A reasonable
-  next step is to employ Bayesian optimisation (W&B `method: bayes`) over a *narrowed* LR
+  next step is to employ Bayesian optimisation (W&B `method: bayes`) over a *narrowed* (to exploit) LR
   range around ≈ 3e-5, to efficiently extract the best final configuration.
 - **Regularisation:** weight decay, augmentation, and checkpoint selection were used.
   Dropout was left at the pre-trained model's default; introducing and tuning it is a
@@ -223,7 +220,7 @@ Hyperparameter sweep (W&B, quasi-random) was driven from the Colab notebook -- f
 - **Data scale:** training used (`seed = 42`) a 10k subsample for compute reasons; the full dataset
   (~249k train images) is available, and training on more real data would likely reduce
   the need for augmentation.
-- **Uncertainty:** with a 2k test set, reporting a confidence interval
+- **Uncertainty:** with a 2k test set, reporting a confidence interval (viz., more runs across seeds)
 - **Augmentation:** for small datasets, additional augmentation could be applied to improve generalization by exposing the model to
  more varied transformations of the training images
 ---
